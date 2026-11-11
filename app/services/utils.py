@@ -1,3 +1,5 @@
+import Service
+from selenium.webdriver.chrome.service 
 from datetime import datetime
 from selenium import webdriver
 import logging
@@ -16,7 +18,16 @@ def get_driver() -> webdriver.Chrome:
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
-        chrome_driver = webdriver.Chrome(options=chrome_options)
+        chrome_options.binary_location = "/usr/bin/chromium"
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_driver = webdriver.Chrome(
+            service=Service(
+                "/usr/bin/chromedriver",
+                service_args=["--verbose"],
+                log_output="/dev/stderr",
+            ),
+            options=chrome_options,
+        )
         chrome_driver.delete_all_cookies()
 
         logging.debug("WebDriver initialized successfully.")
