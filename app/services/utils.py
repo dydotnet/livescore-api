@@ -1,7 +1,9 @@
-import Service
-from selenium.webdriver.chrome.service 
+import logging
 from datetime import datetime
+
+import Levenshtein
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 import logging
 import Levenshtein
 
