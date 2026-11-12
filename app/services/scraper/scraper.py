@@ -30,7 +30,7 @@ class Scraper:
         self.driver.get(url or URL_LIVESPORT)
 
 
-     def get_page(self, url: str) -> None:
+    def get_page(self, url: str) -> None:
         """
         Navigates the WebDriver to the specified URL.
 
