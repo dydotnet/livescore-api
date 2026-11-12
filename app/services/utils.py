@@ -22,7 +22,7 @@ def get_driver() -> webdriver.Chrome:
         chrome_options.add_argument("--disable-gpu")
         chrome_options.binary_location = "/usr/bin/chromium"
         chrome_options.add_argument("--disable-dev-shm-usage")
-                chrome_driver = webdriver.Chrome(
+        chrome_driver = webdriver.Chrome(
             service=Service("/usr/bin/chromedriver"),
             options=chrome_options,
         )
