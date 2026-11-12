@@ -1,10 +1,11 @@
 import logging
+from threading import Lock
 from fastapi import APIRouter, HTTPException, Query
 from app.services.models.country_schemas import CountryListResponse, Country, LeagueListResponse
 from app.services.scraper.country_scraper import CountryScraper
 
 ROUTER_NAME = 'countries'
-
+country_scrape_lock = Lock()
 router = APIRouter()
 
 @router.get("/", response_model=CountryListResponse)
@@ -20,8 +21,7 @@ def get_countries(name: str = Query(None, description="The name of the country t
     """
     try:
         logging.info(f"GET /{ROUTER_NAME} - Starting country scraping process.")
-        country_scraper = CountryScraper()
-        countries = country_scraper.scrape_countries(name)
+        country_scraper
         logging.info(f"GET /{ROUTER_NAME} call successful - Scraped {len(countries)} countries.")
         return CountryListResponse(countries=countries)
     except Exception as e:
@@ -42,8 +42,12 @@ def get_leagues_by_country(countryId: str) -> LeagueListResponse:
     """
     try:
         logging.info(f"GET /{ROUTER_NAME}/{countryId}/leagues - Starting country's leagues scraping process.")
-        country_scraper = CountryScraper()
-        leagues = country_scraper.scrape_leagues_by_country(countryId)
+              with country_scrape_lock:
+            country_scraper = CountryScraper()
+            try:
+                leagues = country_scraper.scrape_leagues_by_country(countryId)
+            finally:
+                country_scraper.driver.quit()
         logging.info(f"GET /{ROUTER_NAME}/{countryId}/leagues call successful - Scraped {len(leagues)} leagues for country {countryId}.")
         return LeagueListResponse(leagues=leagues)
     except Exception as e:
