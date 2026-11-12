@@ -27,17 +27,10 @@ class Scraper:
         self.wait = WebDriverWait(self.driver, timeout=TIMEOUT)
         self.temporary_wait = WebDriverWait(self.driver, timeout=10)
 
-        if url:
-            self.driver.get(url)
-        else:
-            self.driver.get(URL_LIVESPORT)
-
-            button_football_page = self.find_element(XPATH_FOOTBALL_BUTTON)
-            button_football_page.click()
-            logging.debug(f"Reached football page: {self.driver.current_url}")
+        self.driver.get(url or URL_LIVESPORT)
 
 
-    def get_page(self, url: str) -> None:
+     def get_page(self, url: str) -> None:
         """
         Navigates the WebDriver to the specified URL.
 
